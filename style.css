@@ -1,0 +1,73 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Hind Siliguri", sans-serif;
+  transition: all 0.5s ease-in-out;
+}
+
+body {
+  width: 400px;
+  padding: 10px;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: white;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.header h2,
+.header p {
+  color: #111111;
+  margin: 0;
+}
+
+.thanks {
+  text-align: center;
+}
+
+.imgs {
+  margin: 20px auto;
+  text-align: center;
+}
+
+.manual {
+  margin: 20px 0;
+}
+.use {
+  text-align: center;
+}
+.manual p {
+  color: #333;
+  text-align: left;
+}
+
+.manual > p > strong {
+  color: red;
+}
+.mode {
+  text-align: left;
+  color: #333;
+  margin: 5px 0;
+  display: block;
+  font-weight: bold;
+}
+
+.manual {
+  text-align: center;
+  margin: 20px auto;
+}
+
+.manual a {
+  background-color: blueviolet;
+  color: #fff;
+  text-decoration: none;
+  font-size: 15px;
+  padding: 8px 15px;
+  border-radius: 10px;
+}
