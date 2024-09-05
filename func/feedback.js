@@ -6,35 +6,6 @@ const defaultMessage = {
   AVERAGE: [""],
   BAD: [""],
 };
-// function for generating feedback
-// function getFeedBack(submit, num) {
-//   console.log(submit, num);
-//   switch (true) {
-//     case submit === 50 ? num > 49 : num >= 59:
-//       console.log("one");
-//       return defaultMessage["BEST"][
-//         Math.floor(Math.random() * defaultMessage["BEST"].length)
-//       ];
-
-//     case submit === 50 ? num >= 40 && num < 49 : num >= 50 && num < 59:
-//       console.log("two");
-//       return defaultMessage["GOOD"][
-//         Math.floor(Math.random() * defaultMessage["GOOD"].length)
-//       ];
-
-//     case submit === 50 ? num >= 30 && num < 40 : num >= 40 && num < 50:
-//       console.log("three");
-//       return defaultMessage["AVERAGE"][
-//         Math.floor(Math.random() * defaultMessage["AVERAGE"].length)
-//       ];
-
-//     default:
-//       console.log("four");
-//       return defaultMessage["BAD"][
-//         Math.floor(Math.random() * defaultMessage["BAD"].length)
-//       ];
-//   }
-// }
 function getFeedBack(submittedMarks, obtainedMarks) {
   switch (submittedMarks) {
     case "60":
@@ -116,11 +87,14 @@ function getFeedBack(submittedMarks, obtainedMarks) {
 
 function generateFeedbacks() {
   let ourMarks = [
-    { name: "calculateMoney", ...calculateMoneyFeedback },
-    { name: "checkName", ...checkNameFeeback },
-    { name: "deleteInvalids", ...deleteInvalidsFeedback },
-    { name: "password", ...passwordFeedback },
-    { name: "monthlySavings", ...monthlySavingsFeedback },
+    { name: "calculateTax", ...calculateTaxFeedback },
+    { name: "sendNotification", ...sendNotificationFeeback },
+    { name: "checkDigitsInName", ...checkDigitsInNameFeedback },
+    { name: "calculateFinalScore", ...calculateFinalScoreFeedback },
+    {
+      name: "waitingTime",
+      ...waitingTimeFeedback,
+    },
   ];
   // console.log(ourMarks);
   let totalMarkers = ourMarks.reduce((prev, next) => prev + next.marks || 0, 0);

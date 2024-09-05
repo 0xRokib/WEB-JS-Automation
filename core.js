@@ -1,428 +1,133 @@
-let dummySubmission = `function calculateMoney(ticketSale) {
-  if (ticketSale < 0) {
-    return "Invalid Input";
-  } else {
-    return ticketSale * 120 - (500 + 8 * 50);
-  }
-}
-
-function checkName(name) {
-  if (typeof name != "string") {
-    return "Invalid";
-  } else {
-    let result = name.toLowerCase();
-    let flag1 = false;
-    let validLastDigit = "ayieouw";
-    let char = result[result.length - 1];
-    if (validLastDigit.includes(char)) {
-      flag1 = true;
-    } else {
-      flag1 = false;
-    }
-    if (flag1 == true) {
-      return "Good Name";
-    } else return "Bad Name";
-  }
-}
-
-function deleteInvalids(numbers) {
-  if (Array.isArray(numbers) == false) {
-    return "Invalid Input";
-  } else {
-    let result = [];
-    for (let i = 0; i < numbers.length; i++) {
-      let ans = typeof numbers[i];
-      if (ans == "number") {
-        if (!isNaN(numbers[i])) {
-          result.push(numbers[i]);
-        }
-      }
-    }
-    return result;
-  }
-}
-
-function password(obj) {
-  let year = parseInt(obj.birthYear);
-  if (Object.keys(obj).length != 3) {
-    return "Invalid";
-  } else if (year < 1000 || year > 9999) {
-    return "Invalid";
-  } else {
-    let result = "";
-    let tmp = obj.siteName;
-    let tmp1 = tmp.toUpperCase();
-    result = tmp1[0];
-    for (let i = 1; i < tmp.length; i++) {
-      result += tmp[i];
-    }
-    result += "#";
-    result += obj.name;
-    result += "@";
-    result += obj.birthYear;
-    return result;
-  }
-}
-
-function monthlySavings(a, livingCost) {
-  if (Array.isArray(a) == false || typeof livingCost != "number") {
+let dummySubmission = ``;
+function calculateTax(income, expenses) {
+  if (
+    typeof income !== "number" ||
+    income < 0 || // it should be less than you wrote less than or equal
+    typeof expenses !== "number" ||
+    expenses < 0
+  ) {
     return "Invalid Input";
   }
-  let ans = 0;
-  for (let i = 0; i < a.length; i++) {
-    if (a[i] >= 3000) {
-      let tax = 20 * a[i];
-      tax = tax / 100;
-      let tmp = a[i] - tax;
-      ans += tmp;
-    } else ans += a[i];
+
+  var taxableAmount = income - expenses;
+  var tax = taxableAmount * 0.2;
+
+  return tax;
+}
+function sendNotification(email) {
+  if (!email.includes("@")) return "Invalid Email";
+
+  const splittedEmail = email.split("@");
+  const userName = splittedEmail[0];
+  const domain = splittedEmail[1];
+  const newString = `${userName} send you a message from ${domain}`;
+  return newString;
+}
+function checkDigitsInName(name) {
+  if (typeof name !== "string") {
+    return "invalid";
   }
-  let savings = ans - livingCost;
-  if (savings < 0) {
-    return "Earn More";
-  } else return savings;
-}`;
+
+  let containsDigits = false;
+  for (let i = 0; i < name.length; i++) {
+    if (name[i] >= "0" && name[i] <= "9") {
+      containsDigits = true;
+      break;
+    }
+  }
+
+  if (containsDigits) {
+    return true;
+  } else {
+    return false;
+  }
+}
+function calculateFinalScore(input) {
+  // if (typeof input !== "object" || input === null) {
+  //   return "Invalid Input";
+  // }
+
+  const { name, testScore, schoolGrade, isFFFamily } = input;
+
+  // if (
+  //   typeof name !== "string" ||
+  //   typeof testScore !== "number" ||
+  //   typeof schoolGrade !== "number" ||
+  //   typeof isFFFamily !== "boolean"
+  // ) {
+  //   return "Invalid Input";
+  // }
+
+  let finalScore = testScore + schoolGrade;
+  if (isFFFamily) {
+    finalScore += 20;
+  }
+
+  if (finalScore >= 80) {
+    return true;
+  } else {
+    return false;
+  }
+}
+function waitingTime(array, serial) {
+  // if (!Array.isArray(array) || typeof serial != "number") {
+  //   return "Invalid";
+  // }
+  const done = array.length;
+  const averageTime = Math.round(array?.reduce((a, b) => a + b, 0) / done);
+  const remainingPerson = serial - 1 - done;
+  let reamining_time = 0;
+  if (remainingPerson > 0) {
+    reamining_time = remainingPerson * averageTime;
+  }
+  return reamining_time;
+}
+``;
+
 let sampleNoBonus = {
   isBonus: false,
   marks: 0, //if no mark for commenting ==> marks: 0
   bonusMessage: "Your validation is not working so no mark for validation.", //no marks for validation
 };
-let calculateMoneyFeedback = { ...sampleNoBonus };
-let checkNameFeeback = { ...sampleNoBonus };
-let deleteInvalidsFeedback = { ...sampleNoBonus };
-let passwordFeedback = { ...sampleNoBonus };
-let monthlySavingsFeedback = { ...sampleNoBonus };
+
+let calculateTaxFeedback = { ...sampleNoBonus };
+let sendNotificationFeeback = { ...sampleNoBonus };
+let checkDigitsInNameFeedback = { ...sampleNoBonus };
+let calculateFinalScoreFeedback = { ...sampleNoBonus };
+let waitingTimeFeedback = { ...sampleNoBonus };
 
 const startSpyings = async () => {
   try {
     let rawSubmission = document.getElementsByClassName("col-12 col-md-11");
-    let studentSubmisson = rawSubmission[9].innerText;
-    // let studentSubmisson = dummySubmission;
+    // let studentSubmisson = rawSubmission[9].innerText;
+    let studentSubmisson = dummySubmission;
 
     eval(studentSubmisson);
 
-    //-------------------------- calculateMoneyFeedback testing starts here
-    try {
-      // test cases
-      let sampleInput = [1, 17, 39, -99];
-      let expectedOutput = [-780, 1140, 3780, "Random Text"];
-      let [out1, out2, out3, out4] = sampleInput.map((singleIn, index) => {
-        let evalOut = calculateMoney(singleIn);
-        if (evalOut === expectedOutput[index]) {
-          return true;
-        } else if (
-          //validation part
-          index === 3 &&
-          typeof evalOut === "string" &&
-          evalOut.length > 4
-        ) {
-          calculateMoneyFeedback = {
-            ...calculateMoneyFeedback,
-            marks: (calculateMoneyFeedback.marks || 0) + 2, // +2
-            isBonus: true,
-            gotBonus: true,
-            bonusMessage: "You got bonus marks for validation", // you got bonus for validation
-          };
-          return true;
-        } else {
-          return false;
-        }
-      });
-
-      if (out1 && out2 && out3) {
-        calculateMoneyFeedback = {
-          ...calculateMoneyFeedback,
-          marks: (calculateMoneyFeedback.marks || 0) + 10,
-          isSuccess: true,
-          isFunctionAvailable: true, //if I get output from function then true
-          gotFunction: true, //if all output matched
-          message: !out4
-            ? "😞 Good job! But need improvement!"
-            : "🏆 Nice!!! calculateMoney function working fine. Great job!",
-        };
-      } else {
-        calculateMoneyFeedback = {
-          ...calculateMoneyFeedback,
-          isSuccess: null,
-          marks:
-            calculateMoneyFeedback.marks > 0
-              ? calculateMoneyFeedback.marks + 3
-              : 3,
-          isError: true,
-          isFunctionAvailable: true,
-          message:
-            "❌ Wrong output! But You got some partial marks. Need improvement.",
-          bonusMessage: calculateMoneyFeedback.isBonus
-            ? calculateMoneyFeedback.bonusMessage
-            : "No marks for validation.", //"No marks for validation"
-        };
-      }
-    } catch (err) {
-      calculateMoneyFeedback = {
-        ...calculateMoneyFeedback,
-        marks: 0,
-        isFunctionAvailable: null,
-        isSuccess: null,
-        isError: true,
-        message:
-          err.name === "ReferenceError"
-            ? `❌ Error occurred while running calculateMoney function. The error was: "${err.message}"`
-            : err.message,
-      };
-    }
-    // -----------------------------calculateMoneyFeedback testing ends here
-    //-------------------------- checkNameFeeback testing starts here
-    try {
-      // test cases
-      let sampleInput = ["Sadee", "SadSS", 10];
-      let expectedOutput = ["Good Name", "Bad Name", "Random Text"];
-      let [out1, out2, out3] = sampleInput.map((singleIn, index) => {
-        let evalOut = checkName(singleIn);
-        if (evalOut === expectedOutput[index]) {
-          return true;
-        } else if (
-          //validation part
-          index === 2 &&
-          typeof evalOut === "string" &&
-          evalOut.length > 4
-        ) {
-          checkNameFeeback = {
-            ...checkNameFeeback,
-            marks: (checkNameFeeback.marks || 0) + 2, // +2
-            isBonus: true,
-            gotBonus: true,
-            bonusMessage: "You got bonus marks for validation", // you got bonus for validation
-          };
-          return true;
-        } else {
-          return false;
-        }
-      });
-
-      if (out1 && out2) {
-        checkNameFeeback = {
-          ...checkNameFeeback,
-          marks: (checkNameFeeback.marks || 0) + 10,
-          isSuccess: true,
-          isFunctionAvailable: true,
-          gotFunction: true,
-          message: !out3
-            ? "😞 Good job! But need improvement!"
-            : "🏆 Nice!!! checkName function working fine. Great job!",
-        };
-      } else {
-        checkNameFeeback = {
-          ...checkNameFeeback,
-          isSuccess: null,
-          marks: checkNameFeeback.marks > 0 ? checkNameFeeback.marks + 3 : 3,
-          isError: true,
-          isFunctionAvailable: true,
-          message:
-            "❌ Wrong output! But You got some partial marks. Need improvement.",
-          bonusMessage: checkNameFeeback.isBonus
-            ? checkNameFeeback.bonusMessage
-            : "No marks for validation.", //"No marks for validation"
-        };
-      }
-    } catch (err) {
-      checkNameFeeback = {
-        ...checkNameFeeback,
-        marks: 0,
-        isFunctionAvailable: null,
-        isSuccess: null,
-        isError: true,
-        message:
-          err.name === "ReferenceError"
-            ? `❌ Error occurred while running checkName function. The error was: "${err.message}"`
-            : err.message,
-      };
-    }
-    // -----------------------------checkNameFeeback testing ends here
-    //-------------------------- deleteInvalidsFeedback testing starts here
+    //-------------------------- calculateTaxFeedback testing starts here
     try {
       // test cases
       let sampleInput = [
-        [1, 2, "1", "2"],
-        ["1", NaN, 3, undefined, null, 4],
-        [{ num: 2 }, [1, 2, "1"], 5, 6],
-        { name: "x" },
+        [9000, 2500],
+        [0, 0],
+        [0, 0],
+        [-1000, 1000],
       ];
-      let expectedOutput = [[1, 2], [3, 4], [5, 6], "Random Text"];
-      let [out1, out2, out3, out4] = sampleInput.map((singleIn, index) => {
-        let evalOut = deleteInvalids(singleIn);
-        if (JSON.stringify(evalOut) === JSON.stringify(expectedOutput[index])) {
-          return true;
-        } else if (
-          //validation part
-          index === 3 &&
-          typeof evalOut === "string" &&
-          evalOut.length > 4
-        ) {
-          deleteInvalidsFeedback = {
-            ...deleteInvalidsFeedback,
-            marks: (deleteInvalidsFeedback.marks || 0) + 2, // +2
-            isBonus: true,
-            gotBonus: true,
-            bonusMessage: "You got bonus marks for validation", // you got bonus for validation
-          };
-          return true;
-        } else {
-          return false;
-        }
-      });
-
-      if (out1 && out2 && out3) {
-        deleteInvalidsFeedback = {
-          ...deleteInvalidsFeedback,
-          marks: (deleteInvalidsFeedback.marks || 0) + 10,
-          isSuccess: true,
-          isFunctionAvailable: true,
-          gotFunction: true,
-          message: !out4
-            ? "😞 Good job! But need improvement!"
-            : "🏆 Nice!!! deleteInvalids function working fine. Great job!",
-        };
-      } else {
-        deleteInvalidsFeedback = {
-          ...deleteInvalidsFeedback,
-          isSuccess: null,
-          marks:
-            deleteInvalidsFeedback.marks > 0
-              ? deleteInvalidsFeedback.marks + 3
-              : 3,
-          isError: true,
-          isFunctionAvailable: true,
-          message:
-            "❌ Wrong output! But You got some partial marks. Need improvement.",
-          bonusMessage: deleteInvalidsFeedback.isBonus
-            ? deleteInvalidsFeedback.bonusMessage
-            : "No marks for validation.", //"No marks for validation"
-        };
-      }
-    } catch (err) {
-      deleteInvalidsFeedback = {
-        ...deleteInvalidsFeedback,
-        marks: 0,
-        isFunctionAvailable: null,
-        isSuccess: null,
-        isError: true,
-        message:
-          err.name === "ReferenceError"
-            ? `❌ Error occurred while running deleteInvalids function. The error was: "${err.message}"`
-            : err.message,
-      };
-    }
-    // -----------------------------deleteInvalidsFeedback testing ends here
-    //-------------------------- passwordFeedback testing starts here
-    try {
-      // test cases
-      let sampleInput = [
-        { name: "msKhan", birthYear: 2001, siteName: "p-hero.com" },
-        { name: "msKhan", birthYear: 2001, siteName: "something.com" },
-        { name: "msKhan", birthYear: 2001, siteName: "xyz.com" },
-        { name: "msKhan", birthYear: 200, siteName: "p-hero" },
-      ];
-      let expectedOutput = [
-        "P-hero.com#msKhan@2001",
-        "Something.com#msKhan@2001",
-        "Xyz.com#msKhan@2001",
-        "Random Text",
-      ];
-      let [out1, out2, out3, out4] = sampleInput.map((singleIn, index) => {
-        let evalOut = password(singleIn);
-        if (evalOut === expectedOutput[index]) {
-          return true;
-        } else if (
-          //validation part
-          index === 3 &&
-          typeof evalOut === "string" &&
-          evalOut.length > 4
-        ) {
-          passwordFeedback = {
-            ...passwordFeedback,
-            marks: (passwordFeedback.marks || 0) + 2, // +2
-            isBonus: true,
-            gotBonus: true,
-            bonusMessage: "You got bonus marks for validation", // you got bonus for validation
-          };
-          return true;
-        } else {
-          return false;
-        }
-      });
-
-      if (out1 && out2 && out3) {
-        passwordFeedback = {
-          ...passwordFeedback,
-          marks: (passwordFeedback.marks || 0) + 10,
-          isSuccess: true,
-          isFunctionAvailable: true,
-          gotFunction: true,
-          message: !out4
-            ? "😞 Good job! But need improvement!"
-            : "🏆 Nice!!! password function working fine. Great job!",
-        };
-      } else {
-        passwordFeedback = {
-          ...passwordFeedback,
-          isSuccess: null,
-          marks: passwordFeedback.marks > 0 ? passwordFeedback.marks + 3 : 3,
-          isError: true,
-          isFunctionAvailable: true,
-          message:
-            "❌ Wrong output! But You got some partial marks. Need improvement.",
-          bonusMessage: passwordFeedback.isBonus
-            ? passwordFeedback.bonusMessage
-            : "No marks for validation.", //"No marks for validation"
-        };
-      }
-    } catch (err) {
-      passwordFeedback = {
-        ...passwordFeedback,
-        marks: 0,
-        isFunctionAvailable: null,
-        isSuccess: null,
-        isError: true,
-        message:
-          err.name === "ReferenceError"
-            ? `❌ Error occurred while running password function. The error was: "${err.message}"`
-            : err.message,
-      };
-    }
-    // -----------------------------passwordFeedback testing ends here
-    //-------------------------- monthlySavingsFeedback testing starts here
-    try {
-      // test cases
-      let sampleInput = [
-        [[1000, 2000, 6000], 7800],
-        [[1000, 2000, 2000], 4000],
-        [[1000, 2000, 500], 4000],
-        [[{}], "5000"],
-      ];
-      let expectedOutput = [0, 1000, `earn more/"earn more"`, "Random Text"];
+      let expectedOutput = [1300, 0, 0, "Random Text"];
       let [out1, out2, out3, out4] = sampleInput.map(
         ([singleIn1, singleIn2], index) => {
-          let evalOut = monthlySavings(singleIn1, singleIn2);
+          let evalOut = calculateTax(singleIn1, singleIn2);
           if (evalOut === expectedOutput[index]) {
-            return true;
-          } else if (
-            //validation part
-            index === 2 &&
-            typeof evalOut === "string" &&
-            (evalOut == "earn more" || evalOut == `"earn more"`)
-          ) {
             return true;
           } else if (
             //validation part
             index === 3 &&
             typeof evalOut === "string" &&
-            evalOut.length > 4 &&
-            evalOut != "earn more" &&
-            evalOut != `"earn more"`
+            evalOut.length > 4
           ) {
-            monthlySavingsFeedback = {
-              ...monthlySavingsFeedback,
-              marks: (monthlySavingsFeedback.marks || 0) + 2, // +2
+            calculateTaxFeedback = {
+              ...calculateTaxFeedback,
+              marks: (calculateTaxFeedback.marks || 0) + 2, // +2
               isBonus: true,
               gotBonus: true,
               bonusMessage: "You got bonus marks for validation", // you got bonus for validation
@@ -435,47 +140,358 @@ const startSpyings = async () => {
       );
 
       if (out1 && out2 && out3) {
-        monthlySavingsFeedback = {
-          ...monthlySavingsFeedback,
-          marks: (monthlySavingsFeedback.marks || 0) + 10,
+        calculateTaxFeedback = {
+          ...calculateTaxFeedback,
+          marks: (calculateTaxFeedback.marks || 0) + 10,
           isSuccess: true,
-          isFunctionAvailable: true,
-          gotFunction: true,
+          isFunctionAvailable: true, //if I get output from function then true
+          gotFunction: true, //if all output matched
           message: !out4
             ? "😞 Good job! But need improvement!"
-            : "🏆 Nice!!! monthlySavings function working fine. Great job!",
+            : "🏆 Nice!!! calculateTax function working fine. Great job!",
         };
       } else {
-        monthlySavingsFeedback = {
-          ...monthlySavingsFeedback,
+        calculateTaxFeedback = {
+          ...calculateTaxFeedback,
           isSuccess: null,
           marks:
-            monthlySavingsFeedback.marks > 0
-              ? monthlySavingsFeedback.marks + 3
-              : 3,
+            calculateTaxFeedback.marks > 0 ? calculateTaxFeedback.marks + 3 : 3,
           isError: true,
           isFunctionAvailable: true,
           message:
             "❌ Wrong output! But You got some partial marks. Need improvement.",
-          bonusMessage: monthlySavingsFeedback.isBonus
-            ? monthlySavingsFeedback.bonusMessage
+          bonusMessage: calculateTaxFeedback.isBonus
+            ? calculateTaxFeedback.bonusMessage
             : "No marks for validation.", //"No marks for validation"
         };
       }
     } catch (err) {
-      monthlySavingsFeedback = {
-        ...monthlySavingsFeedback,
+      calculateTaxFeedback = {
+        ...calculateTaxFeedback,
         marks: 0,
         isFunctionAvailable: null,
         isSuccess: null,
         isError: true,
         message:
           err.name === "ReferenceError"
-            ? `❌ Error occurred while running monthlySavings function. The error was: "${err.message}"`
+            ? `❌ Error occurred while running calculateTax function. The error was: "${err.message}"`
             : err.message,
       };
     }
-    // -----------------------------monthlySavingsFeedback testing ends here
+    // ----------------------------- calculateTaxFeedback testing ends here
+    //-------------------------- sendNotificationFeeback testing starts here
+    try {
+      // test cases
+      let sampleInput = [
+        "zihad@gmail.com",
+        "shabaj@gmail.com",
+        "zihadgmail.com",
+      ];
+      let expectedOutput = [
+        "zihad send you a message from gmail.com",
+        "shabaj send you a message from gmail.com",
+        "Random Text",
+      ];
+      let [out1, out2, out3] = sampleInput.map((singleIn, index) => {
+        let evalOut = sendNotification(singleIn);
+        if (evalOut === expectedOutput[index]) {
+          return true;
+        } else if (
+          //validation part
+          index === 2 &&
+          typeof evalOut === "string" &&
+          evalOut.length > 4
+        ) {
+          sendNotificationFeeback = {
+            ...sendNotificationFeeback,
+            marks: (sendNotificationFeeback.marks || 0) + 2, // +2
+            isBonus: true,
+            gotBonus: true,
+            bonusMessage: "You got bonus marks for validation", // you got bonus for validation
+          };
+          return true;
+        } else {
+          return false;
+        }
+      });
+
+      if (out1 && out2) {
+        sendNotificationFeeback = {
+          ...sendNotificationFeeback,
+          marks: (sendNotificationFeeback.marks || 0) + 10,
+          isSuccess: true,
+          isFunctionAvailable: true,
+          gotFunction: true,
+          message: !out3
+            ? "😞 Good job! But need improvement!"
+            : "🏆 Nice!!! sendNotification function working fine. Great job!",
+        };
+      } else {
+        sendNotificationFeeback = {
+          ...sendNotificationFeeback,
+          isSuccess: null,
+          marks:
+            sendNotificationFeeback.marks > 0
+              ? sendNotificationFeeback.marks + 3
+              : 3,
+          isError: true,
+          isFunctionAvailable: true,
+          message:
+            "❌ Wrong output! But You got some partial marks. Need improvement.",
+          bonusMessage: sendNotificationFeeback.isBonus
+            ? sendNotificationFeeback.bonusMessage
+            : "No marks for validation.", //"No marks for validation"
+        };
+      }
+    } catch (err) {
+      sendNotificationFeeback = {
+        ...sendNotificationFeeback,
+        marks: 0,
+        isFunctionAvailable: null,
+        isSuccess: null,
+        isError: true,
+        message:
+          err.name === "ReferenceError"
+            ? `❌ Error occurred while running sendNotification function. The error was: "${err.message}"`
+            : err.message,
+      };
+    }
+    // -----------------------------sendNotificationFeeback testing ends here
+    //-------------------------- checkDigitsInNameFeedback testing starts here
+    try {
+      // test cases
+      let sampleInput = ["Hello1", "Hello", "1Hello", {}];
+      let expectedOutput = [true, false, true, "Random Text"];
+      let [out1, out2, out3, out4] = sampleInput.map((singleIn, index) => {
+        let evalOut = checkDigitsInName(singleIn);
+        if (JSON.stringify(evalOut) === JSON.stringify(expectedOutput[index])) {
+          return true;
+        } else if (
+          //validation part
+          index === 3 &&
+          typeof evalOut === "string" &&
+          evalOut.length > 4
+        ) {
+          checkDigitsInNameFeedback = {
+            ...checkDigitsInNameFeedback,
+            marks: (checkDigitsInNameFeedback.marks || 0) + 2, // +2
+            isBonus: true,
+            gotBonus: true,
+            bonusMessage: "You got bonus marks for validation", // you got bonus for validation
+          };
+          return true;
+        } else {
+          return false;
+        }
+      });
+
+      if (out1 && out2 && out3) {
+        checkDigitsInNameFeedback = {
+          ...checkDigitsInNameFeedback,
+          marks: (checkDigitsInNameFeedback.marks || 0) + 10,
+          isSuccess: true,
+          isFunctionAvailable: true,
+          gotFunction: true,
+          message: !out4
+            ? "😞 Good job! But need improvement!"
+            : "🏆 Nice!!! checkDigitsInName function working fine. Great job!",
+        };
+      } else {
+        checkDigitsInNameFeedback = {
+          ...checkDigitsInNameFeedback,
+          isSuccess: null,
+          marks:
+            checkDigitsInNameFeedback.marks > 0
+              ? checkDigitsInNameFeedback.marks + 3
+              : 3,
+          isError: true,
+          isFunctionAvailable: true,
+          message:
+            "❌ Wrong output! But You got some partial marks. Need improvement.",
+          bonusMessage: checkDigitsInNameFeedback.isBonus
+            ? checkDigitsInNameFeedback.bonusMessage
+            : "No marks for validation.", //"No marks for validation"
+        };
+      }
+    } catch (err) {
+      checkDigitsInNameFeedback = {
+        ...checkDigitsInNameFeedback,
+        marks: 0,
+        isFunctionAvailable: null,
+        isSuccess: null,
+        isError: true,
+        message:
+          err.name === "ReferenceError"
+            ? `❌ Error occurred while running checkDigitsInName function. The error was: "${err.message}"`
+            : err.message,
+      };
+    }
+    // -----------------------------checkDigitsInNameFeedback testing ends here
+    //-------------------------- calculateFinalScoreFeedback testing starts here
+    try {
+      // test cases
+      let sampleInput = [
+        {
+          name: "Rajib",
+          testScore: 45,
+          schoolGrade: 25,
+          isFFFamily: true,
+        },
+        {
+          name: "Rajib",
+          testScore: 45,
+          schoolGrade: 25,
+          isFFFamily: false,
+        },
+        {
+          name: "Rajib",
+          testScore: 15,
+          schoolGrade: 25,
+          isFFFamily: true,
+        },
+        "hello",
+      ];
+      let expectedOutput = [true, false, false, "Random Text"];
+      let [out1, out2, out3, out4] = sampleInput.map((singleIn, index) => {
+        let evalOut = calculateFinalScore(singleIn);
+        if (evalOut === expectedOutput[index]) {
+          return true;
+        } else if (
+          //validation part
+          index === 3 &&
+          typeof evalOut === "string" &&
+          evalOut.length > 4
+        ) {
+          calculateFinalScoreFeedback = {
+            ...calculateFinalScoreFeedback,
+            marks: (calculateFinalScoreFeedback.marks || 0) + 2, // +2
+            isBonus: true,
+            gotBonus: true,
+            bonusMessage: "You got bonus marks for validation", // you got bonus for validation
+          };
+          return true;
+        } else {
+          return false;
+        }
+      });
+
+      if (out1 && out2 && out3) {
+        calculateFinalScoreFeedback = {
+          ...calculateFinalScoreFeedback,
+          marks: (calculateFinalScoreFeedback.marks || 0) + 10,
+          isSuccess: true,
+          isFunctionAvailable: true,
+          gotFunction: true,
+          message: !out4
+            ? "😞 Good job! But need improvement!"
+            : "🏆 Nice!!! calculateFinalScore function working fine. Great job!",
+        };
+      } else {
+        calculateFinalScoreFeedback = {
+          ...calculateFinalScoreFeedback,
+          isSuccess: null,
+          marks:
+            calculateFinalScoreFeedback.marks > 0
+              ? calculateFinalScoreFeedback.marks + 3
+              : 3,
+          isError: true,
+          isFunctionAvailable: true,
+          message:
+            "❌ Wrong output! But You got some partial marks. Need improvement.",
+          bonusMessage: calculateFinalScoreFeedback.isBonus
+            ? calculateFinalScoreFeedback.bonusMessage
+            : "No marks for validation.", //"No marks for validation"
+        };
+      }
+    } catch (err) {
+      calculateFinalScoreFeedback = {
+        ...calculateFinalScoreFeedback,
+        marks: 0,
+        isFunctionAvailable: null,
+        isSuccess: null,
+        isError: true,
+        message:
+          err.name === "ReferenceError"
+            ? `❌ Error occurred while running calculateFinalScore function. The error was: "${err.message}"`
+            : err.message,
+      };
+    }
+    // -----------------------------calculateFinalScoreFeedback testing ends here
+    //-------------------------- waitingTimeFeedback testing starts here
+    try {
+      // test cases
+      let sampleInput = [
+        [[3, 5, 7, 21, 6], 10],
+        [[13, 2, 10, 7, 10, 20, 2], 6],
+        ["", "9999"],
+      ];
+      let expectedOutput = [32, 0, "Random Text"];
+      let [out1, out2, out3, out4] = sampleInput.map(
+        ([singleIn1, singleIn2], index) => {
+          let evalOut = waitingTime(singleIn1, singleIn2);
+          console.log("four-", index + 1, "-ans-", evalOut);
+          if (evalOut === expectedOutput[index]) {
+            return true;
+          } else if (
+            //validation part
+            index === 2 &&
+            typeof evalOut === "string" &&
+            evalOut.length > 4
+          ) {
+            waitingTimeFeedback = {
+              ...waitingTimeFeedback,
+              marks: (waitingTimeFeedback.marks || 0) + 2, // +2
+              isBonus: true,
+              gotBonus: true,
+              bonusMessage: "You got bonus marks for validation", // you got bonus for validation
+            };
+            return true;
+          } else {
+            return false;
+          }
+        }
+      );
+
+      if (out1 && out2) {
+        waitingTimeFeedback = {
+          ...waitingTimeFeedback,
+          marks: (waitingTimeFeedback.marks || 0) + 10,
+          isSuccess: true,
+          isFunctionAvailable: true,
+          gotFunction: true,
+          message: !out3
+            ? "😞 Good job! But need improvement!"
+            : "🏆 Nice!!! waitingTime function working fine. Great job!",
+        };
+      } else {
+        waitingTimeFeedback = {
+          ...waitingTimeFeedback,
+          isSuccess: null,
+          marks:
+            waitingTimeFeedback.marks > 0 ? waitingTimeFeedback.marks + 3 : 3,
+          isError: true,
+          isFunctionAvailable: true,
+          message:
+            "❌ Wrong output! But You got some partial marks. Need improvement.",
+          bonusMessage: waitingTimeFeedback.isBonus
+            ? waitingTimeFeedback.bonusMessage
+            : "No marks for validation.", //"No marks for validation"
+        };
+      }
+    } catch (err) {
+      waitingTimeFeedback = {
+        ...waitingTimeFeedback,
+        marks: 0,
+        isFunctionAvailable: null,
+        isSuccess: null,
+        isError: true,
+        message:
+          err.name === "ReferenceError"
+            ? `❌ Error occurred while running waitingTime function. The error was: "${err.message}"`
+            : err.message,
+      };
+    }
+    // -----------------------------waitingTimeFeedback testing ends here
   } catch (err) {
     const feedbackSample = {
       marks: 0,
@@ -489,10 +505,10 @@ const startSpyings = async () => {
           ? "No functions found or You may have misspelled your function name."
           : err.message,
     };
-    calculateMoneyFeedback = feedbackSample;
-    checkNameFeeback = feedbackSample;
-    deleteInvalidsFeedback = feedbackSample;
-    passwordFeedback = feedbackSample;
-    monthlySavingsFeedback = feedbackSample;
+    calculateTaxFeedback = feedbackSample;
+    sendNotificationFeeback = feedbackSample;
+    checkDigitsInNameFeedback = feedbackSample;
+    calculateFinalScoreFeedback = feedbackSample;
+    waitingTimeFeedback = feedbackSample;
   }
 };
