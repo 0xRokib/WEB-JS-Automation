@@ -1,88 +1,4 @@
 let dummySubmission = ``;
-function calculateTax(income, expenses) {
-  if (
-    typeof income !== "number" ||
-    income < 0 || // it should be less than you wrote less than or equal
-    typeof expenses !== "number" ||
-    expenses < 0
-  ) {
-    return "Invalid Input";
-  }
-
-  var taxableAmount = income - expenses;
-  var tax = taxableAmount * 0.2;
-
-  return tax;
-}
-function sendNotification(email) {
-  if (!email.includes("@")) return "Invalid Email";
-
-  const splittedEmail = email.split("@");
-  const userName = splittedEmail[0];
-  const domain = splittedEmail[1];
-  const newString = `${userName} send you a message from ${domain}`;
-  return newString;
-}
-function checkDigitsInName(name) {
-  if (typeof name !== "string") {
-    return "invalid";
-  }
-
-  let containsDigits = false;
-  for (let i = 0; i < name.length; i++) {
-    if (name[i] >= "0" && name[i] <= "9") {
-      containsDigits = true;
-      break;
-    }
-  }
-
-  if (containsDigits) {
-    return true;
-  } else {
-    return false;
-  }
-}
-function calculateFinalScore(input) {
-  // if (typeof input !== "object" || input === null) {
-  //   return "Invalid Input";
-  // }
-
-  const { name, testScore, schoolGrade, isFFFamily } = input;
-
-  // if (
-  //   typeof name !== "string" ||
-  //   typeof testScore !== "number" ||
-  //   typeof schoolGrade !== "number" ||
-  //   typeof isFFFamily !== "boolean"
-  // ) {
-  //   return "Invalid Input";
-  // }
-
-  let finalScore = testScore + schoolGrade;
-  if (isFFFamily) {
-    finalScore += 20;
-  }
-
-  if (finalScore >= 80) {
-    return true;
-  } else {
-    return false;
-  }
-}
-function waitingTime(array, serial) {
-  // if (!Array.isArray(array) || typeof serial != "number") {
-  //   return "Invalid";
-  // }
-  const done = array.length;
-  const averageTime = Math.round(array?.reduce((a, b) => a + b, 0) / done);
-  const remainingPerson = serial - 1 - done;
-  let reamining_time = 0;
-  if (remainingPerson > 0) {
-    reamining_time = remainingPerson * averageTime;
-  }
-  return reamining_time;
-}
-``;
 
 let sampleNoBonus = {
   isBonus: false,
@@ -99,41 +15,45 @@ let waitingTimeFeedback = { ...sampleNoBonus };
 const startSpyings = async () => {
   try {
     let rawSubmission = document.getElementsByClassName("col-12 col-md-11");
-    // let studentSubmisson = rawSubmission[9].innerText;
-    let studentSubmisson = dummySubmission;
+    let studentSubmisson = rawSubmission[9].innerText;
+    // let studentSubmisson = dummySubmission;
 
     eval(studentSubmisson);
 
-    //-------------------------- calculateTaxFeedback testing starts here
+    // 1 -------------------------- calculateTaxFeedback testing starts here
     try {
       // test cases
       let sampleInput = [
-        [9000, 2500],
-        [0, 0],
-        [0, 0],
-        [-1000, 1000],
+        [1000, 200],
+        [2000, 400],
+        [3000, 600],
+        [-100, 100],
       ];
-      let expectedOutput = [1300, 0, 0, "Random Text"];
+      let expectedOutput = [160, 320, 480, "Random Text"];
       let [out1, out2, out3, out4] = sampleInput.map(
         ([singleIn1, singleIn2], index) => {
-          let evalOut = calculateTax(singleIn1, singleIn2);
-          if (evalOut === expectedOutput[index]) {
-            return true;
-          } else if (
-            //validation part
-            index === 3 &&
-            typeof evalOut === "string" &&
-            evalOut.length > 4
-          ) {
-            calculateTaxFeedback = {
-              ...calculateTaxFeedback,
-              marks: (calculateTaxFeedback.marks || 0) + 2, // +2
-              isBonus: true,
-              gotBonus: true,
-              bonusMessage: "You got bonus marks for validation", // you got bonus for validation
-            };
-            return true;
-          } else {
+          try {
+            let evalOut = calculateTax(singleIn1, singleIn2);
+            if (evalOut === expectedOutput[index]) {
+              return true;
+            } else if (
+              //validation part
+              index === 3 &&
+              typeof evalOut === "string" &&
+              evalOut.length > 4
+            ) {
+              calculateTaxFeedback = {
+                ...calculateTaxFeedback,
+                marks: (calculateTaxFeedback.marks || 0) + 2, // +2
+                isBonus: true,
+                gotBonus: true,
+                bonusMessage: "You got bonus marks for validation", // you got bonus for validation
+              };
+              return true;
+            } else {
+              return false;
+            }
+          } catch (error) {
             return false;
           }
         }
@@ -179,38 +99,42 @@ const startSpyings = async () => {
       };
     }
     // ----------------------------- calculateTaxFeedback testing ends here
-    //-------------------------- sendNotificationFeeback testing starts here
+    // 2 -------------------------- sendNotificationFeeback testing starts here
     try {
       // test cases
       let sampleInput = [
-        "zihad@gmail.com",
-        "shabaj@gmail.com",
-        "zihadgmail.com",
+        "mahmud12@gmail.com",
+        "arif.khan9@outlook.com",
+        "sadia8icloud.com",
       ];
       let expectedOutput = [
-        "zihad send you a message from gmail.com",
-        "shabaj send you a message from gmail.com",
+        "mahmud12 sent you an email from gmail.com",
+        "arif.khan9 sent you an email from outlook.com",
         "Random Text",
       ];
       let [out1, out2, out3] = sampleInput.map((singleIn, index) => {
-        let evalOut = sendNotification(singleIn);
-        if (evalOut === expectedOutput[index]) {
-          return true;
-        } else if (
-          //validation part
-          index === 2 &&
-          typeof evalOut === "string" &&
-          evalOut.length > 4
-        ) {
-          sendNotificationFeeback = {
-            ...sendNotificationFeeback,
-            marks: (sendNotificationFeeback.marks || 0) + 2, // +2
-            isBonus: true,
-            gotBonus: true,
-            bonusMessage: "You got bonus marks for validation", // you got bonus for validation
-          };
-          return true;
-        } else {
+        try {
+          let evalOut = sendNotification(singleIn);
+          if (evalOut === expectedOutput[index]) {
+            return true;
+          } else if (
+            //validation part
+            index === 2 &&
+            typeof evalOut === "string" &&
+            evalOut.length > 4
+          ) {
+            sendNotificationFeeback = {
+              ...sendNotificationFeeback,
+              marks: (sendNotificationFeeback.marks || 0) + 2, // +2
+              isBonus: true,
+              gotBonus: true,
+              bonusMessage: "You got bonus marks for validation", // you got bonus for validation
+            };
+            return true;
+          } else {
+            return false;
+          }
+        } catch (error) {
           return false;
         }
       });
@@ -257,30 +181,36 @@ const startSpyings = async () => {
       };
     }
     // -----------------------------sendNotificationFeeback testing ends here
-    //-------------------------- checkDigitsInNameFeedback testing starts here
+    // 3 -------------------------- checkDigitsInNameFeedback testing starts here
     try {
       // test cases
       let sampleInput = ["Hello1", "Hello", "1Hello", {}];
       let expectedOutput = [true, false, true, "Random Text"];
       let [out1, out2, out3, out4] = sampleInput.map((singleIn, index) => {
-        let evalOut = checkDigitsInName(singleIn);
-        if (JSON.stringify(evalOut) === JSON.stringify(expectedOutput[index])) {
-          return true;
-        } else if (
-          //validation part
-          index === 3 &&
-          typeof evalOut === "string" &&
-          evalOut.length > 4
-        ) {
-          checkDigitsInNameFeedback = {
-            ...checkDigitsInNameFeedback,
-            marks: (checkDigitsInNameFeedback.marks || 0) + 2, // +2
-            isBonus: true,
-            gotBonus: true,
-            bonusMessage: "You got bonus marks for validation", // you got bonus for validation
-          };
-          return true;
-        } else {
+        try {
+          let evalOut = checkDigitsInName(singleIn);
+          if (
+            JSON.stringify(evalOut) === JSON.stringify(expectedOutput[index])
+          ) {
+            return true;
+          } else if (
+            //validation part
+            index === 3 &&
+            typeof evalOut === "string" &&
+            evalOut.length > 4
+          ) {
+            checkDigitsInNameFeedback = {
+              ...checkDigitsInNameFeedback,
+              marks: (checkDigitsInNameFeedback.marks || 0) + 2, // +2
+              isBonus: true,
+              gotBonus: true,
+              bonusMessage: "You got bonus marks for validation", // you got bonus for validation
+            };
+            return true;
+          } else {
+            return false;
+          }
+        } catch (error) {
           return false;
         }
       });
@@ -327,50 +257,54 @@ const startSpyings = async () => {
       };
     }
     // -----------------------------checkDigitsInNameFeedback testing ends here
-    //-------------------------- calculateFinalScoreFeedback testing starts here
+    // 4 -------------------------- calculateFinalScoreFeedback testing starts here
     try {
       // test cases
       let sampleInput = [
         {
           name: "Rajib",
-          testScore: 45,
-          schoolGrade: 25,
-          isFFFamily: true,
+          testScore: 40,
+          schoolGrade: 20,
+          isFFamily: true,
         },
         {
           name: "Rajib",
-          testScore: 45,
-          schoolGrade: 25,
-          isFFFamily: false,
+          testScore: 50,
+          schoolGrade: 30,
+          isFFamily: false,
         },
         {
           name: "Rajib",
-          testScore: 15,
-          schoolGrade: 25,
-          isFFFamily: true,
+          testScore: 35,
+          schoolGrade: 20,
+          isFFamily: false,
         },
-        "hello",
+        "Hello",
       ];
-      let expectedOutput = [true, false, false, "Random Text"];
+      let expectedOutput = [true, true, false, "Random Text"];
       let [out1, out2, out3, out4] = sampleInput.map((singleIn, index) => {
-        let evalOut = calculateFinalScore(singleIn);
-        if (evalOut === expectedOutput[index]) {
-          return true;
-        } else if (
-          //validation part
-          index === 3 &&
-          typeof evalOut === "string" &&
-          evalOut.length > 4
-        ) {
-          calculateFinalScoreFeedback = {
-            ...calculateFinalScoreFeedback,
-            marks: (calculateFinalScoreFeedback.marks || 0) + 2, // +2
-            isBonus: true,
-            gotBonus: true,
-            bonusMessage: "You got bonus marks for validation", // you got bonus for validation
-          };
-          return true;
-        } else {
+        try {
+          let evalOut = calculateFinalScore(singleIn);
+          if (evalOut === expectedOutput[index]) {
+            return true;
+          } else if (
+            //validation part
+            index === 3 &&
+            typeof evalOut === "string" &&
+            evalOut.length > 4
+          ) {
+            calculateFinalScoreFeedback = {
+              ...calculateFinalScoreFeedback,
+              marks: (calculateFinalScoreFeedback.marks || 0) + 2, // +2
+              isBonus: true,
+              gotBonus: true,
+              bonusMessage: "You got bonus marks for validation", // you got bonus for validation
+            };
+            return true;
+          } else {
+            return false;
+          }
+        } catch (error) {
           return false;
         }
       });
@@ -417,36 +351,39 @@ const startSpyings = async () => {
       };
     }
     // -----------------------------calculateFinalScoreFeedback testing ends here
-    //-------------------------- waitingTimeFeedback testing starts here
+    // 5 -------------------------- waitingTimeFeedback testing starts here
     try {
       // test cases
       let sampleInput = [
-        [[3, 5, 7, 21, 6], 10],
-        [[13, 2, 10, 7, 10, 20, 2], 6],
-        ["", "9999"],
+        [[5, 5, 5, 5], 10],
+        [[1, 1, 1, 1, 1], 6],
+        [123, ""],
       ];
-      let expectedOutput = [32, 0, "Random Text"];
+      let expectedOutput = [25, 0, "Random Text"];
       let [out1, out2, out3, out4] = sampleInput.map(
         ([singleIn1, singleIn2], index) => {
-          let evalOut = waitingTime(singleIn1, singleIn2);
-          console.log("four-", index + 1, "-ans-", evalOut);
-          if (evalOut === expectedOutput[index]) {
-            return true;
-          } else if (
-            //validation part
-            index === 2 &&
-            typeof evalOut === "string" &&
-            evalOut.length > 4
-          ) {
-            waitingTimeFeedback = {
-              ...waitingTimeFeedback,
-              marks: (waitingTimeFeedback.marks || 0) + 2, // +2
-              isBonus: true,
-              gotBonus: true,
-              bonusMessage: "You got bonus marks for validation", // you got bonus for validation
-            };
-            return true;
-          } else {
+          try {
+            let evalOut = waitingTime(singleIn1, singleIn2);
+            if (evalOut === expectedOutput[index]) {
+              return true;
+            } else if (
+              //validation part
+              index === 2 &&
+              typeof evalOut === "string" &&
+              evalOut.length > 4
+            ) {
+              waitingTimeFeedback = {
+                ...waitingTimeFeedback,
+                marks: (waitingTimeFeedback.marks || 0) + 2, // +2
+                isBonus: true,
+                gotBonus: true,
+                bonusMessage: "You got bonus marks for validation", // you got bonus for validation
+              };
+              return true;
+            } else {
+              return false;
+            }
+          } catch (error) {
             return false;
           }
         }

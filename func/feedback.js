@@ -125,9 +125,8 @@ function generateFeedbacks() {
       `;
   }
 
+  // <strong>Examiner Feedback:</strong> ${getFeedBack(submitedNum, totalMarkers)}
   feedback += `
-  
-  <strong>Examiner Feedback:</strong> ${getFeedBack(submitedNum, totalMarkers)}
   
   <strong>Important Instructions:</strong>
     → Don't post any marks-related issues on Facebook.
@@ -144,6 +143,10 @@ function generateFeedbacks() {
 
   // Actual Marks Box
   const markField = document.getElementById("Mark");
+  // document.getElementById("Mark").focus();
+  setTimeout(() => {
+    document.getElementById("Mark").value = totalMarkers;
+  }, 500);
 
   const gotMark = document.createElement("p");
   gotMark.className = "m-2 w-50 markSuggestions";
