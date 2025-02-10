@@ -7,7 +7,7 @@
   "content_scripts": [
     {
       "matches": ["*://*.programming-hero.com/*", "*://*/popup.html"],
-      "js": ["root.js", "core.js", "/func/feedback.js", "extractFunction.js"]
+      "js": ["root.js", "core.js", "/func/feedback.js"]
     }
   ],
   "browser_action": {

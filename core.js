@@ -20,6 +20,12 @@ const startSpyings = async () => {
 
     eval(studentSubmisson);
 
+    const functionNames = [
+      ...studentSubmisson.matchAll(/function\s+(\w+)\s*\(/g),
+    ].map((match) => match[1]);
+
+    console.log("Function Names:", functionNames);
+
     // 1 -------------------------- calculateTaxFeedback testing starts here
     try {
       // test cases
@@ -40,7 +46,7 @@ const startSpyings = async () => {
               //validation part
               index === 3 &&
               typeof evalOut === "string" &&
-              evalOut.length > 4
+              evalOut.length > 6
             ) {
               calculateTaxFeedback = {
                 ...calculateTaxFeedback,
@@ -71,19 +77,34 @@ const startSpyings = async () => {
             : "🏆 Nice!!! calculateTax function working fine. Great job!",
         };
       } else {
-        calculateTaxFeedback = {
-          ...calculateTaxFeedback,
-          isSuccess: null,
-          marks:
-            calculateTaxFeedback.marks > 0 ? calculateTaxFeedback.marks + 3 : 3,
-          isError: true,
-          isFunctionAvailable: true,
-          message:
-            "❌ Wrong output! But You got some partial marks. Need improvement.",
-          bonusMessage: calculateTaxFeedback.isBonus
-            ? calculateTaxFeedback.bonusMessage
-            : "No marks for validation.", //"No marks for validation"
-        };
+        if (functionNames.includes("calculateTax")) {
+          calculateTaxFeedback = {
+            ...calculateTaxFeedback,
+            isSuccess: null,
+            marks:
+              calculateTaxFeedback.marks > 0
+                ? calculateTaxFeedback.marks + 3
+                : 3,
+            isError: true,
+            isFunctionAvailable: true,
+            message:
+              "❌ Wrong output! But You got some partial marks. Need improvement.",
+            bonusMessage: calculateTaxFeedback.isBonus
+              ? calculateTaxFeedback.bonusMessage
+              : "No marks for validation.", //"No marks for validation"
+          };
+        } else {
+          calculateTaxFeedback = {
+            marks: 0,
+            isFunctionAvailable: null,
+            isError: true,
+            isSuccess: null,
+            isBonus: null,
+            bonusMessage: "No bonus marks for validation",
+            message:
+              "No functions found or You may have misspelled your function name.",
+          };
+        }
       }
     } catch (err) {
       calculateTaxFeedback = {
@@ -121,7 +142,7 @@ const startSpyings = async () => {
             //validation part
             index === 2 &&
             typeof evalOut === "string" &&
-            evalOut.length > 4
+            evalOut.length > 6
           ) {
             sendNotificationFeeback = {
               ...sendNotificationFeeback,
@@ -151,21 +172,34 @@ const startSpyings = async () => {
             : "🏆 Nice!!! sendNotification function working fine. Great job!",
         };
       } else {
-        sendNotificationFeeback = {
-          ...sendNotificationFeeback,
-          isSuccess: null,
-          marks:
-            sendNotificationFeeback.marks > 0
-              ? sendNotificationFeeback.marks + 3
-              : 3,
-          isError: true,
-          isFunctionAvailable: true,
-          message:
-            "❌ Wrong output! But You got some partial marks. Need improvement.",
-          bonusMessage: sendNotificationFeeback.isBonus
-            ? sendNotificationFeeback.bonusMessage
-            : "No marks for validation.", //"No marks for validation"
-        };
+        if (functionNames.includes("sendNotification")) {
+          sendNotificationFeeback = {
+            ...sendNotificationFeeback,
+            isSuccess: null,
+            marks:
+              sendNotificationFeeback.marks > 0
+                ? sendNotificationFeeback.marks + 3
+                : 3,
+            isError: true,
+            isFunctionAvailable: true,
+            message:
+              "❌ Wrong output! But You got some partial marks. Need improvement.",
+            bonusMessage: sendNotificationFeeback.isBonus
+              ? sendNotificationFeeback.bonusMessage
+              : "No marks for validation.", //"No marks for validation"
+          };
+        } else {
+          sendNotificationFeeback = {
+            marks: 0,
+            isFunctionAvailable: null,
+            isError: true,
+            isSuccess: null,
+            isBonus: null,
+            bonusMessage: "No bonus marks for validation",
+            message:
+              "No functions found or You may have misspelled your function name.",
+          };
+        }
       }
     } catch (err) {
       sendNotificationFeeback = {
@@ -197,7 +231,7 @@ const startSpyings = async () => {
             //validation part
             index === 3 &&
             typeof evalOut === "string" &&
-            evalOut.length > 4
+            evalOut.length > 6
           ) {
             checkDigitsInNameFeedback = {
               ...checkDigitsInNameFeedback,
@@ -215,33 +249,64 @@ const startSpyings = async () => {
         }
       });
 
-      if (out1 && out2 && out3) {
-        checkDigitsInNameFeedback = {
-          ...checkDigitsInNameFeedback,
-          marks: (checkDigitsInNameFeedback.marks || 0) + 10,
-          isSuccess: true,
-          isFunctionAvailable: true,
-          gotFunction: true,
-          message: !out4
-            ? "😞 Good job! But need improvement!"
-            : "🏆 Nice!!! checkDigitsInName function working fine. Great job!",
-        };
+      if (out1 && out2) {
+        if (out3) {
+          checkDigitsInNameFeedback = {
+            ...checkDigitsInNameFeedback,
+            marks: (checkDigitsInNameFeedback.marks || 0) + 10,
+            isSuccess: true,
+            isFunctionAvailable: true,
+            gotFunction: true,
+            message: !out4
+              ? "😞 Good job! But need improvement!"
+              : "🏆 Nice!!! checkDigitsInName function working fine. Great job!",
+          };
+        } else {
+          checkDigitsInNameFeedback = {
+            ...checkDigitsInNameFeedback,
+            isSuccess: null,
+            marks:
+              checkDigitsInNameFeedback.marks > 0
+                ? checkDigitsInNameFeedback.marks + 5
+                : 5,
+            isError: true,
+            isFunctionAvailable: true,
+            message:
+              "❌ Wrong output for input '1Hello'. Expected output 'true' but got 'false'. Some marks are deducted. Need improvement.",
+            bonusMessage: checkDigitsInNameFeedback.isBonus
+              ? checkDigitsInNameFeedback.bonusMessage
+              : "No marks for validation.", //"No marks for validation"
+          };
+        }
       } else {
-        checkDigitsInNameFeedback = {
-          ...checkDigitsInNameFeedback,
-          isSuccess: null,
-          marks:
-            checkDigitsInNameFeedback.marks > 0
-              ? checkDigitsInNameFeedback.marks + 3
-              : 3,
-          isError: true,
-          isFunctionAvailable: true,
-          message:
-            "❌ Wrong output! But You got some partial marks. Need improvement.",
-          bonusMessage: checkDigitsInNameFeedback.isBonus
-            ? checkDigitsInNameFeedback.bonusMessage
-            : "No marks for validation.", //"No marks for validation"
-        };
+        if (functionNames.includes("checkDigitsInName")) {
+          checkDigitsInNameFeedback = {
+            ...checkDigitsInNameFeedback,
+            isSuccess: null,
+            marks:
+              checkDigitsInNameFeedback.marks > 0
+                ? checkDigitsInNameFeedback.marks + 3
+                : 3,
+            isError: true,
+            isFunctionAvailable: true,
+            message:
+              "❌ Wrong output! But You got some partial marks. Need improvement.",
+            bonusMessage: checkDigitsInNameFeedback.isBonus
+              ? checkDigitsInNameFeedback.bonusMessage
+              : "No marks for validation.", //"No marks for validation"
+          };
+        } else {
+          checkDigitsInNameFeedback = {
+            marks: 0,
+            isFunctionAvailable: null,
+            isError: true,
+            isSuccess: null,
+            isBonus: null,
+            bonusMessage: "No bonus marks for validation",
+            message:
+              "No functions found or You may have misspelled your function name.",
+          };
+        }
       }
     } catch (err) {
       checkDigitsInNameFeedback = {
@@ -291,7 +356,7 @@ const startSpyings = async () => {
             //validation part
             index === 3 &&
             typeof evalOut === "string" &&
-            evalOut.length > 4
+            evalOut.length > 6
           ) {
             calculateFinalScoreFeedback = {
               ...calculateFinalScoreFeedback,
@@ -321,21 +386,34 @@ const startSpyings = async () => {
             : "🏆 Nice!!! calculateFinalScore function working fine. Great job!",
         };
       } else {
-        calculateFinalScoreFeedback = {
-          ...calculateFinalScoreFeedback,
-          isSuccess: null,
-          marks:
-            calculateFinalScoreFeedback.marks > 0
-              ? calculateFinalScoreFeedback.marks + 3
-              : 3,
-          isError: true,
-          isFunctionAvailable: true,
-          message:
-            "❌ Wrong output! But You got some partial marks. Need improvement.",
-          bonusMessage: calculateFinalScoreFeedback.isBonus
-            ? calculateFinalScoreFeedback.bonusMessage
-            : "No marks for validation.", //"No marks for validation"
-        };
+        if (functionNames.includes("calculateFinalScore")) {
+          calculateFinalScoreFeedback = {
+            ...calculateFinalScoreFeedback,
+            isSuccess: null,
+            marks:
+              calculateFinalScoreFeedback.marks > 0
+                ? calculateFinalScoreFeedback.marks + 3
+                : 3,
+            isError: true,
+            isFunctionAvailable: true,
+            message:
+              "❌ Wrong output! But You got some partial marks. Need improvement.",
+            bonusMessage: calculateFinalScoreFeedback.isBonus
+              ? calculateFinalScoreFeedback.bonusMessage
+              : "No marks for validation.", //"No marks for validation"
+          };
+        } else {
+          calculateFinalScoreFeedback = {
+            marks: 0,
+            isFunctionAvailable: null,
+            isError: true,
+            isSuccess: null,
+            isBonus: null,
+            bonusMessage: "No bonus marks for validation",
+            message:
+              "No functions found or You may have misspelled your function name.",
+          };
+        }
       }
     } catch (err) {
       calculateFinalScoreFeedback = {
@@ -370,7 +448,7 @@ const startSpyings = async () => {
               //validation part
               index === 2 &&
               typeof evalOut === "string" &&
-              evalOut.length > 4
+              evalOut.length > 6
             ) {
               waitingTimeFeedback = {
                 ...waitingTimeFeedback,
@@ -401,19 +479,32 @@ const startSpyings = async () => {
             : "🏆 Nice!!! waitingTime function working fine. Great job!",
         };
       } else {
-        waitingTimeFeedback = {
-          ...waitingTimeFeedback,
-          isSuccess: null,
-          marks:
-            waitingTimeFeedback.marks > 0 ? waitingTimeFeedback.marks + 3 : 3,
-          isError: true,
-          isFunctionAvailable: true,
-          message:
-            "❌ Wrong output! But You got some partial marks. Need improvement.",
-          bonusMessage: waitingTimeFeedback.isBonus
-            ? waitingTimeFeedback.bonusMessage
-            : "No marks for validation.", //"No marks for validation"
-        };
+        if (functionNames.includes("waitingTime")) {
+          waitingTimeFeedback = {
+            ...waitingTimeFeedback,
+            isSuccess: null,
+            marks:
+              waitingTimeFeedback.marks > 0 ? waitingTimeFeedback.marks + 3 : 3,
+            isError: true,
+            isFunctionAvailable: true,
+            message:
+              "❌ Wrong output! But You got some partial marks. Need improvement.",
+            bonusMessage: waitingTimeFeedback.isBonus
+              ? waitingTimeFeedback.bonusMessage
+              : "No marks for validation.", //"No marks for validation"
+          };
+        } else {
+          waitingTimeFeedback = {
+            marks: 0,
+            isFunctionAvailable: null,
+            isError: true,
+            isSuccess: null,
+            isBonus: null,
+            bonusMessage: "No bonus marks for validation",
+            message:
+              "No functions found or You may have misspelled your function name.",
+          };
+        }
       }
     } catch (err) {
       waitingTimeFeedback = {
@@ -449,3 +540,10 @@ const startSpyings = async () => {
     waitingTimeFeedback = feedbackSample;
   }
 };
+
+/*
+missing funciton
+undeclared variable
+missing parameters
+
+*/
