@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sandbox</title>
+</head>
+<body>
+    <script>
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'execute_code') {
+                const { code, tests } = event.data;
+                try {
+                    // Helper function for deep equality check
+                    function areEqual(a, b) {
+                        if (typeof a === 'object' && a !== null && typeof b === 'object' && b !== null) {
+                            return JSON.stringify(a) === JSON.stringify(b);
+                        }
+                        if (typeof a === 'number' && typeof b === 'number') {
+                            return Math.abs(a - b) < 1e-9;
+                        }
+                        return a === b;
+                    }
+
+                    // Execute the student's code
+                    const script = document.createElement('script');
+                    script.textContent = code;
+                    document.head.appendChild(script);
+
+                    const results = {
+                        totalMarks: 0,
+                        feedback: []
+                    };
+
+                    for (const funcName in tests) {
+                        if (Object.hasOwnProperty.call(tests, funcName)) {
+                            const funcTests = tests[funcName];
+                            const feedback = {
+                                name: funcName,
+                                marks: 0,
+                                message: '',
+                                bonusMessage: ''
+                            };
+
+                            let functionScore = 0;
+                            let validationBonus = 0;
+                            let regularTestsPassed = 0;
+                            let totalRegularTests = 0;
+                            let validationTestPassed = false;
+                            let isFunctionAvailable = false;
+                            
+                            if (typeof window[funcName] !== 'function') {
+                                feedback.message = `No functions found or You may have misspelled your function name.`;
+                                feedback.bonusMessage = `\u274C No bonus marks for validation`;
+                            } else {
+                                isFunctionAvailable = true;
+                                
+                                funcTests.forEach(test => {
+                                    try {
+                                        const actual = window[funcName](...test.input);
+                                        const expected = test.expected;
+                                        const passed = areEqual(actual, expected);
+
+                                        if (test.validation) {
+                                            // Validation test
+                                            if (passed || (typeof actual === 'string' && actual.length > 6)) {
+                                                validationBonus = 2;
+                                                validationTestPassed = true;
+                                            }
+                                        } else {
+                                            // Regular test
+                                            totalRegularTests++;
+                                            if (passed) {
+                                                regularTestsPassed++;
+                                                functionScore += 4; // 4 points per regular test
+                                            }
+                                        }
+                                    } catch (error) {
+                                        if (!test.validation) {
+                                            totalRegularTests++;
+                                        }
+                                    }
+                                });
+                                
+                                // Generate feedback based on results - same logic as main system
+                                const allRegularTestsPassed = regularTestsPassed === totalRegularTests;
+                                
+                                if (allRegularTestsPassed && regularTestsPassed > 0) {
+                                    // All regular tests passed
+                                    functionScore = 10; // Base score for perfect regular tests
+                                    feedback.message = validationTestPassed 
+                                        ? `\uD83C\uDFC6 Nice!!! ${funcName} function working fine. Great job!`
+                                        : `\uD83D\uDE1E Good job! But need improvement!`;
+                                } else if (regularTestsPassed > 0) {
+                                    // Some regular tests passed
+                                    functionScore = 3; // Partial score
+                                    feedback.message = `\u274C Wrong output! But You got some partial marks. Need improvement.`;
+                                    if (!validationTestPassed) {
+                                        feedback.bonusMessage = `\u274C No marks for validation.`;
+                                    }
+                                } else {
+                                    // No regular tests passed
+                                    functionScore = 0;
+                                    feedback.message = `\u274C Wrong output! But You got some partial marks. Need improvement.`;
+                                    feedback.bonusMessage = validationTestPassed 
+                                        ? `\u2714\uFE0F You got bonus marks for validation`
+                                        : `\u274C No marks for validation.`;
+                                }
+                                
+                                // Add validation bonus message if earned
+                                if (validationTestPassed && feedback.message.includes('Nice!!!')) {
+                                    feedback.bonusMessage = `\u2714\uFE0F You got bonus marks for validation`;
+                                }
+                            }
+
+                            const finalScore = Math.min(functionScore + validationBonus, 12);
+                            feedback.marks = finalScore;
+                            results.totalMarks += finalScore;
+                            results.feedback.push(feedback);
+                        }
+                    }
+
+                    // Send results back to parent
+                    window.parent.postMessage({ type: 'execution_result', results: results }, '*');
+                } catch (error) {
+                    window.parent.postMessage({ type: 'execution_error', error: error.message }, '*');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

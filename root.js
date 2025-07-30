@@ -9,38 +9,61 @@ document.addEventListener("keydown", async function (event) {
 
   // run the function using proper keypress
   if (event.code === "Backslash") {
-    calculateTaxFeedback = { ...sampleNoBonus };
-    sendNotificationFeeback = { ...sampleNoBonus };
-    checkDigitsInNameFeedback = { ...sampleNoBonus };
-    calculateFinalScoreFeedback = { ...sampleNoBonus };
-    waitingTimeFeedback = { ...sampleNoBonus };
+    ///cat1
+    cashOutFeedback = { ...sampleNoBonus };
+    validEmailFeedback = { ...sampleNoBonus };
+    electionResultFeedback = { ...sampleNoBonus };
+    isBestFriendFeedback = { ...sampleNoBonus };
+    calculateWatchTimeFeedback = { ...sampleNoBonus };
+
+    ///cat2
+    calculateVATFeedback = { ...sampleNoBonus };
+    validContactFeedback = { ...sampleNoBonus };
+    willSuccessFeedback = { ...sampleNoBonus };
+    validProposalFeedback = { ...sampleNoBonus };
+    calculateSleepTimeFeedback = { ...sampleNoBonus };
+
+    const assignmentInfo = document.querySelector(
+      ".assignment-evaluation-form"
+    ).innerText;
+
+    cat = new RegExp(/Variant\n(.*?)\n/gm).exec(assignmentInfo)?.[1] || "";
 
     // Call the evaluation function
     startSpyings();
 
-    let ourMarks = [
-      { name: "calculateTax", ...calculateTaxFeedback },
-      { name: "sendNotification", ...sendNotificationFeeback },
-      { name: "checkDigitsInName", ...checkDigitsInNameFeedback },
-      { name: "calculateFinalScore", ...calculateFinalScoreFeedback },
-      {
-        name: "waitingTime",
-        ...waitingTimeFeedback,
-      },
-    ];
+    // let ourMarks = [
+    //   { name: "cashOut", ...cashOutFeedback },
+    //   { name: "validEmail", ...validEmailFeedback },
+    //   { name: "electionResult", ...electionResultFeedback },
+    //   { name: "isBestFriend", ...isBestFriendFeedback },
+    //   {
+    //     name: "calculateWatchTime",
+    //     ...calculateWatchTimeFeedback,
+    //   },
+    // ];
 
     // student's submission get
-    let rawSubmission = document.getElementsByClassName("col-12 col-md-11");
-    let studentSubmisson = rawSubmission[9].innerText;
+    // let rawSubmission = document.getElementsByClassName("col-12 col-md-11");
+    // let studentSubmisson = rawSubmission[9].innerText;
 
     //feedback generation funciton call
     generateFeedbacks();
   } else if (event.code === "KeyR") {
-    calculateTaxFeedback = { ...sampleNoBonus };
-    sendNotificationFeeback = { ...sampleNoBonus };
-    checkDigitsInNameFeedback = { ...sampleNoBonus };
-    calculateFinalScoreFeedback = { ...sampleNoBonus };
-    waitingTimeFeedback = { ...sampleNoBonus };
+    ///cat1
+    cashOutFeedback = { ...sampleNoBonus };
+    validEmailFeedback = { ...sampleNoBonus };
+    electionResultFeedback = { ...sampleNoBonus };
+    isBestFriendFeedback = { ...sampleNoBonus };
+    calculateWatchTimeFeedback = { ...sampleNoBonus };
+
+    ///cat2
+    calculateVATFeedback = { ...sampleNoBonus };
+    validContactFeedback = { ...sampleNoBonus };
+    willSuccessFeedback = { ...sampleNoBonus };
+    validProposalFeedback = { ...sampleNoBonus };
+    calculateSleepTimeFeedback = { ...sampleNoBonus };
+
     var elementToRemove = document.querySelector("#functional-assignment");
     var marSug = document.getElementById("markSuggestions");
     elementToRemove.remove();

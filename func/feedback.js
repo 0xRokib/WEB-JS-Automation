@@ -1,11 +1,28 @@
 // random feedbacks
 
 const defaultMessage = {
-  BEST: [""],
-  GOOD: [""],
-  AVERAGE: [""],
-  BAD: [""],
+  BEST: [
+    "Awesome work!🌟 Keep it up! 💪",
+    "Wow! 👏 You did very well! It must have been your dedication and hard work behind it. Keep up the fantastic effort! 🚀",
+    "Congratulations 🎉 on achieving a perfect score! You should be very proud! 🏆",
+  ],
+  GOOD: [
+    "Good job! 👏 Keep working hard! 💪",
+    "Solid effort!📈 Keep practicing, and you'll reach your goals! 🎯",
+    "You're on the right track!📈 Keep up the good work! 👏",
+  ],
+  AVERAGE: [
+    "There's always room for improvement. Keep practicing, and you'll see results! 💪",
+    "It looks like you could use some extra practice. Don’t give up—keep at it! 🚀",
+    "Remember, progress takes time ⏳. Keep working hard, and you'll improve! 🌟",
+  ],
+  BAD: [
+    "Stay focused and keep pushing forward—wishing you the best of luck! 💪",
+    "It looks like you faced some challenges this time. Don't be discouraged; keep at it! 💪",
+    "Remember, everyone makes mistakes. Keep learning and growing! 🌟",
+  ],
 };
+
 function getFeedBack(submittedMarks, obtainedMarks) {
   switch (submittedMarks) {
     case "60":
@@ -86,16 +103,35 @@ function getFeedBack(submittedMarks, obtainedMarks) {
 }
 
 function generateFeedbacks() {
-  let ourMarks = [
-    { name: "calculateTax", ...calculateTaxFeedback },
-    { name: "sendNotification", ...sendNotificationFeeback },
-    { name: "checkDigitsInName", ...checkDigitsInNameFeedback },
-    { name: "calculateFinalScore", ...calculateFinalScoreFeedback },
-    {
-      name: "waitingTime",
-      ...waitingTimeFeedback,
-    },
-  ];
+  let ourMarks;
+
+  if (cat === "Assignment_04_Category_001") {
+    ourMarks = [
+      { name: "cashOut", ...cashOutFeedback },
+      { name: "validEmail", ...validEmailFeedback },
+      { name: "electionResult", ...electionResultFeedback },
+      { name: "isBestFriend", ...isBestFriendFeedback },
+      {
+        name: "calculateWatchTime",
+        ...calculateWatchTimeFeedback,
+      },
+    ];
+  } else if (cat === "Assignment_04_Category_002") {
+    ourMarks = [
+      { name: "calculateVAT", ...calculateVATFeedback },
+      { name: "validContact", ...validContactFeedback },
+      { name: "willSuccess", ...willSuccessFeedback },
+      { name: "validProposal", ...validProposalFeedback },
+      {
+        name: "calculateSleepTime",
+        ...calculateSleepTimeFeedback,
+      },
+    ];
+  } else {
+    alert("Error Category not found");
+    return;
+  }
+
   // console.log(ourMarks);
   let totalMarkers = ourMarks.reduce((prev, next) => prev + next.marks || 0, 0);
 
@@ -120,7 +156,7 @@ function generateFeedbacks() {
   <strong style="text-align:left;">${
     finalFeedback.name
   }:</strong>&nbsp&nbsp<span>${
-      finalFeedback?.message + " " + finalFeedback.bonusMessage
+      finalFeedback?.message + "\n&nbsp&nbsp" + finalFeedback.bonusMessage
     }</span>
       `;
   }
@@ -154,4 +190,25 @@ function generateFeedbacks() {
   gotMark.innerText = `${totalMarkers} ?`;
 
   markField.after(gotMark);
+}
+
+function showLogs(logs) {
+  const feedbackBox = document.getElementsByClassName(
+    "feedback-box p-3 mx-4 box-shadow"
+  )[0];
+  let text = document.getElementById("load-feedback");
+  if (!text) {
+    const link = document.createElement("link");
+    link.href = "https://fonts.cdnfonts.com/css/sf-mono";
+    link.rel = "stylesheet";
+    document.head.appendChild(link);
+
+    text = document.createElement("div");
+    text.setAttribute("class", " container cantdupli");
+    text.setAttribute("id", "load-feedback");
+    feedbackBox.insertBefore(text, feedbackBox.firstChild);
+  }
+  text.innerHTML = `<p style="font-size: 32px;">Logs</p>`;
+  text.innerHTML += `<p id="feed-box" class="" style="
+white-space: pre; overflow-x: auto;font-family: 'SF mono', SFMono-Regular, ui-monospace, monospace !important; padding: 2px;">${logs}</p>`;
 }

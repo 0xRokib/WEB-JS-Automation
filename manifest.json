@@ -1,16 +1,26 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "JS Assignment Automation",
   "description": "JS Assignment Automation Extension for PHero. Created by SANY 🍔 & Moniruzzaman ☕️ & SAKI 🌶️",
   "version": "2.1.1",
-  "permissions": ["activeTab"],
+  "permissions": ["activeTab", "tabs"],
+  "web_accessible_resources": [
+    {
+      "resources": ["manual-checker.html", "manual-checker.js"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "sandbox": {
+    "pages": ["sandbox.html"]
+  },
   "content_scripts": [
     {
       "matches": ["*://*.programming-hero.com/*", "*://*/popup.html"],
-      "js": ["root.js", "core.js", "/func/feedback.js"]
+      "js": ["root.js", "core.js", "/func/feedback.js", "/func/log1.js", "/func/log2.js"],
+      "world": "MAIN"
     }
   ],
-  "browser_action": {
+  "action": {
     "default_title": "PHero Functional",
     "default_popup": "./popup/popup.html"
   },
