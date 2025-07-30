@@ -70,7 +70,7 @@ This project is a powerful Chrome extension designed to streamline the process o
 ### **Project Structure**
 
 ```
-WEB11-A4-Automation/
+WEB-JS-Automation/
 ├── assets/                     # Icons and other assets
 ├── func/                       # Core functionality for the automated checker
 │   ├── feedback.js
